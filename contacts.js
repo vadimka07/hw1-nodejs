@@ -5,25 +5,22 @@ import {nanoid} from "nanoid";
 
 const contactsPath = path.resolve('db/contacts.json');
 async function listContacts() {
-  // ...твій код. Повертає масив контактів.
-  await fs
-    .readFile(contactsPath)
-    .then((data) => {
-      console.table(JSON.parse(data.toString()));
-    })
-    .catch((error) => {
-      console.log(error);
-    });
+  try{
+    const allContacts = await fs.readFile(contactsPath);
+    console.table(JSON.parse(allContacts.toString()))
+  }catch (error) {
+    console.log(error.message)
+  }
+
 }
 
-function getContactById(contactId) {
-  return fs.readFile(contactsPath).then((data) => {
-    const result = JSON.parse(data).find((item) => item.id === contactId);
-    if (!result) {
-      return console.log(null);
-    }
-    return console.log(result);
-  });
+async function getContactById(contactId) {
+  const allContacts = await fs.readFile(contactsPath);
+  const result = JSON.parse(allContacts).find((item) => item.id === contactId);
+  if (!result) {
+    return console.log(null);
+  }
+  return console.log(result);
 }
 
 async function removeContact(contactId) {
